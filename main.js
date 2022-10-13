@@ -19,13 +19,49 @@ controls.enableDamping = true;
 const house = new THREE.Group();
 scene.add(house);
 
-// Walls
-const walls = new THREE.Mesh(
-    new THREE.BoxGeometry(4, 2.5, 4),
+// Front wall
+const frontwall = new THREE.Mesh(
+    new THREE.PlaneGeometry(4, 2.5, 4),
     new THREE.MeshStandardMaterial({ color:'#ac8e82' })
 );
-walls.position.y = 2.5 / 2;
-house.add(walls);
+frontwall.position.y = 2.5 / 2;
+frontwall.position.z = 2;
+frontwall.material.side = THREE.DoubleSide;
+house.add(frontwall);
+
+// Back wall
+const backwall = new THREE.Mesh(
+    new THREE.PlaneGeometry(4, 2.5, 4),
+    new THREE.MeshStandardMaterial({ color:'#ac8e82' }),
+);
+backwall.position.y = 2.5 / 2;
+backwall.position.z = -2;
+backwall.material.side = THREE.DoubleSide;
+house.add(backwall);
+
+// Right wall
+const rightwall = new THREE.Mesh(
+    new THREE.PlaneGeometry(4, 2.5, 4),
+    new THREE.MeshStandardMaterial({ color:'#ac8e82' })
+);
+rightwall.position.x = 2;
+rightwall.position.y = 2.5 / 2;
+rightwall.position.z = 0;
+rightwall.rotation.y = Math.PI / 2;
+rightwall.material.side = THREE.DoubleSide;
+house.add(rightwall);
+
+// Left wall
+const leftwall = new THREE.Mesh(
+    new THREE.PlaneGeometry(4, 2.5, 4),
+    new THREE.MeshStandardMaterial({ color:'#ac8e82' })
+);
+leftwall.position.x = -2;
+leftwall.position.y = 2.5 / 2;
+leftwall.position.z = 0;
+leftwall.rotation.y = Math.PI / 2;
+leftwall.material.side = THREE.DoubleSide;
+house.add(leftwall);
 
 // Roof
 const roof = new THREE.Mesh(
@@ -52,6 +88,7 @@ const floor = new THREE.Mesh(
 );
 floor.rotation.x = -Math.PI * 0.5;
 floor.position.y = 0;
+floor.material.side = THREE.DoubleSide;
 scene.add(floor);
 
 // Light
