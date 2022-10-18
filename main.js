@@ -1,6 +1,9 @@
 import './style.css';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import wallTexture from '/brick.jpg';
+// import GLTF loader
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -20,9 +23,10 @@ const house = new THREE.Group();
 scene.add(house);
 
 // Front wall
+const fwalltext= new THREE.TextureLoader().load( wallTexture )
 const frontwall = new THREE.Mesh(
     new THREE.PlaneGeometry(4, 2.5, 4),
-    new THREE.MeshStandardMaterial({ color:'#ac8e82' })
+    new THREE.MeshStandardMaterial({ map: fwalltext })
 );
 frontwall.position.y = 2.5 / 2;
 frontwall.position.z = 2;
@@ -30,9 +34,10 @@ frontwall.material.side = THREE.DoubleSide;
 house.add(frontwall);
 
 // Back wall
+const bwalltext= new THREE.TextureLoader().load( wallTexture )
 const backwall = new THREE.Mesh(
     new THREE.PlaneGeometry(4, 2.5, 4),
-    new THREE.MeshStandardMaterial({ color:'#ac8e82' }),
+    new THREE.MeshStandardMaterial({ map: bwalltext })
 );
 backwall.position.y = 2.5 / 2;
 backwall.position.z = -2;
@@ -40,9 +45,10 @@ backwall.material.side = THREE.DoubleSide;
 house.add(backwall);
 
 // Right wall
+const rwalltext= new THREE.TextureLoader().load( wallTexture )
 const rightwall = new THREE.Mesh(
     new THREE.PlaneGeometry(4, 2.5, 4),
-    new THREE.MeshStandardMaterial({ color:'#ac8e82' })
+    new THREE.MeshStandardMaterial({ map: rwalltext })
 );
 rightwall.position.x = 2;
 rightwall.position.y = 2.5 / 2;
@@ -52,9 +58,10 @@ rightwall.material.side = THREE.DoubleSide;
 house.add(rightwall);
 
 // Left wall
+const lwalltext= new THREE.TextureLoader().load( wallTexture )
 const leftwall = new THREE.Mesh(
     new THREE.PlaneGeometry(4, 2.5, 4),
-    new THREE.MeshStandardMaterial({ color:'#ac8e82' })
+    new THREE.MeshStandardMaterial({ map: lwalltext })
 );
 leftwall.position.x = -2;
 leftwall.position.y = 2.5 / 2;
@@ -66,7 +73,7 @@ house.add(leftwall);
 // Roof
 const roof = new THREE.Mesh(
     new THREE.ConeGeometry(3.5, 2, 4),
-    new THREE.MeshStandardMaterial({ color:'#b35f45' })
+    new THREE.MeshStandardMaterial({ color: "#BA4F26" })
 );
 roof.position.y = 2.5 + 1; // walls height + roof height/2
 roof.rotation.y = Math.PI / 4;
@@ -91,6 +98,17 @@ floor.position.y = 0;
 floor.material.side = THREE.DoubleSide;
 scene.add(floor);
 
+// Wesp
+let wesp;
+const loader = new GLTFLoader();
+loader.load( '/wesp.gltf', ( gltf )  => {
+    wesp = gltf.scene;
+    wesp.position.set(2, 2, 4);
+    wesp.scale.set(0.2, 0.2, 0.2);
+    wesp.rotation.set(0, -5, 0);
+    scene.add( gltf.scene );
+});
+
 // Light
 // Ambient light
 const ambientLight = new THREE.AmbientLight("#daeefe", 0.5); // color, intensity
@@ -108,10 +126,11 @@ scene.add(directionalLight);
 camera.position.z = 10; // move backward
 camera.position.y = 3;
 
-function animate() {
-	requestAnimationFrame( animate );
-
+// animate wesp
+function animateWesp() {
+    requestAnimationFrame( animateWesp );
+    wesp.rotation.y += 0.01;
     renderer.render( scene, camera );
 };
 
-animate();
+animateWesp();
